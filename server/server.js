@@ -11,7 +11,7 @@ app.use(express.json());
 
 const userRoutes = require("./routes/userRoutes");
 const jobRoutes = require("./routes/jobRoutes");
-const resumeRoutes = require("./routes/atsRoutes");
+const atsRoutes = require("./routes/atsRoutes");
 
 
 app.use("/api/ats", atsRoutes);
