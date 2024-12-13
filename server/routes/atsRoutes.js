@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const natural = require("natural");
 
-// Route for calculating ATS score
+// Route for ATS score calculation
 router.post("/ats-score", (req, res) => {
   const { resumeText, jobDescription } = req.body;
 
@@ -10,7 +10,7 @@ router.post("/ats-score", (req, res) => {
     return res.status(400).json({ message: "Both resume and job description are required!" });
   }
 
-  // Tokenize words for comparison
+  // Tokenize words
   const tokenizer = new natural.WordTokenizer();
   const resumeTokens = tokenizer.tokenize(resumeText.toLowerCase());
   const jobTokens = tokenizer.tokenize(jobDescription.toLowerCase());
@@ -19,14 +19,13 @@ router.post("/ats-score", (req, res) => {
   const resumeWords = Array.from(new Set(resumeTokens));
   const jobWords = Array.from(new Set(jobTokens));
 
-  // Calculate matched keywords
-  const matchedWords = resumeWords.filter((word) => jobWords.includes(word));
-  const matchPercentage = (matchedWords.length / jobWords.length) * 100;
+  // Find matched keywords
+  const matchedKeywords = resumeWords.filter((word) => jobWords.includes(word));
+  const matchPercentage = (matchedKeywords.length / jobWords.length) * 100;
 
   res.json({
-    matchedKeywords: matchedWords,
+    matchedKeywords,
     score: Math.round(matchPercentage),
-    totalKeywords: jobWords.length,
   });
 });
 

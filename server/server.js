@@ -14,7 +14,7 @@ const jobRoutes = require("./routes/jobRoutes");
 const atsRoutes = require("./routes/atsRoutes");
 
 
-app.use("/api/ats", atsRoutes);
+app.use("/api", atsRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/jobs", jobRoutes);
 

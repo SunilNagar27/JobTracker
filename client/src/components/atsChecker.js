@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const AtsChecker = () => {
+const ATSChecker = () => {
   const [resumeText, setResumeText] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [atsScore, setAtsScore] = useState(null);
   const [matchedKeywords, setMatchedKeywords] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/resume/ats-score", {
+      const response = await axios.post("http://localhost:5000/api/ats-score", {
         resumeText,
         jobDescription,
       });
@@ -21,12 +23,16 @@ const AtsChecker = () => {
       setMatchedKeywords(matchedKeywords);
     } catch (error) {
       console.error("Error calculating ATS score:", error.response?.data || error.message);
+      setAtsScore(null);
+      setMatchedKeywords([]);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
-      <h1>Resume Maker</h1>
+      <h1>ATS Checker</h1>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "20px" }}>
           <textarea
@@ -36,6 +42,7 @@ const AtsChecker = () => {
             value={resumeText}
             onChange={(e) => setResumeText(e.target.value)}
             style={{ width: "100%", padding: "10px" }}
+            required
           />
         </div>
         <div style={{ marginBottom: "20px" }}>
@@ -46,6 +53,7 @@ const AtsChecker = () => {
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
             style={{ width: "100%", padding: "10px" }}
+            required
           />
         </div>
         <button
@@ -58,7 +66,7 @@ const AtsChecker = () => {
             cursor: "pointer",
           }}
         >
-          Get ATS Score
+          {loading ? "Checking..." : "Get ATS Score"}
         </button>
       </form>
 
@@ -66,7 +74,7 @@ const AtsChecker = () => {
         <div style={{ marginTop: "20px" }}>
           <h3>ATS Score: {atsScore}%</h3>
           <p>
-            <strong>Matched Keywords:</strong> {matchedKeywords.join(", ")}
+            <strong>Matched Keywords:</strong> {matchedKeywords.length > 0 ? matchedKeywords.join(", ") : "None"}
           </p>
         </div>
       )}
@@ -74,4 +82,4 @@ const AtsChecker = () => {
   );
 };
 
-export default AtsChecker;
+export default ATSChecker;
