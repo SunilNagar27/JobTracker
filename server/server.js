@@ -18,8 +18,9 @@ app.use("/api", atsRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/jobs", jobRoutes);
 
-mongoose
-  .connect(process.env.MONGO_URI, { })
+
+
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 

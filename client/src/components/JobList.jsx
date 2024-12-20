@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { fetchJobs, createJob, updateJobStatus, deleteJob } from "../api";
 import { useNavigate } from "react-router-dom";
 
-
 const JobList = () => {
   const [jobs, setJobs] = useState([]);
   const [newJob, setNewJob] = useState({ title: "", company: "" });
-  const [isRegister, setIsRegister] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -19,7 +17,6 @@ const JobList = () => {
     }
   }, []);
 
-  // Fetch jobs from the server
   const loadJobs = async () => {
     try {
       const { data } = await fetchJobs();
@@ -29,7 +26,6 @@ const JobList = () => {
     }
   };
 
-  // Create a new job
   const handleCreateJob = async (e) => {
     e.preventDefault();
     try {
@@ -41,7 +37,6 @@ const JobList = () => {
     }
   };
 
-  // Update the status of a job
   const handleUpdateJob = async (id, status) => {
     try {
       await updateJobStatus(id, { status });
@@ -51,13 +46,6 @@ const JobList = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // Clear the token
-    setIsLoggedIn(false); // Update state to logged out
-    navigate("/"); // Redirect to the home page
-  };
-
-  // Delete a job
   const handleDeleteJob = async (id) => {
     try {
       await deleteJob(id);
@@ -73,62 +61,72 @@ const JobList = () => {
 
   return (
     <div>
-           <button
-            onClick={handleLogout}
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#007bff",
-              color: "#fff",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Logout
-          </button>
-      <h2>Job Tracker</h2>
+      
+      <h2 className="text-zinc-950 font-semibold text-4xl text-center mt-4 p-3">Manage Applications</h2>
       <form onSubmit={handleCreateJob}>
-        <input
-          type="text"
-          placeholder="Job Title"
-          value={newJob.title}
-          onChange={(e) => setNewJob({ ...newJob, title: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Company"
-          value={newJob.company}
-          onChange={(e) => setNewJob({ ...newJob, company: e.target.value })}
-          required
-        />
-        <button type="submit">Add Job</button>
+        <div className="flex mt-4 flex-row gap-4 justify-end mr-4">
+          <input
+            className="border border-slate-600 p-1"
+            type="text"
+            placeholder="Job Title"
+            value={newJob.title}
+            onChange={(e) => setNewJob({ ...newJob, title: e.target.value })}
+            required
+          />
+          <input
+            className="border border-slate-600 p-1"
+            type="text"
+            placeholder="Company"
+            value={newJob.company}
+            onChange={(e) => setNewJob({ ...newJob, company: e.target.value })}
+            required
+          />
+          <button className="bg-blue-500 px-5 hover:bg-blue-600 hover:scale-105" type="submit">Add Job</button>
+        </div>
       </form>
-
-      <ul>
-        {jobs.map((job) => (
-          <li key={job._id}>
-            <h3>{job.title}</h3>
-            <p>Company: {job.company}</p>
-            <p>
-              Date Added: {new Date(job.createdAt).toLocaleDateString()}{" "}
-              {new Date(job.createdAt).toLocaleTimeString()}
-            </p>
-            <p>
-              Status:{" "}
-              <select
-                value={job.status}
-                onChange={(e) => handleUpdateJob(job._id, e.target.value)}
-              >
-                <option value="Applied">Applied</option>
-                <option value="Interviewing">Interviewing</option>
-                <option value="Offered">Offered</option>
-                <option value="Rejected">Rejected</option>
-              </select>
-            </p>
-            <button onClick={() => handleDeleteJob(job._id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      <table className="table-auto border-collapse border border-gray-400 w-full mt-5">
+        <thead>
+          <tr className="bg-zinc-950 text-white">
+            <th className="border border-gray-400 p-2">Job Title</th>
+            <th className="border border-gray-400 p-2">Company</th>
+            <th className="border border-gray-400 p-2">Date</th>
+            <th className="border border-gray-400 p-2">Status</th>
+            <th className="border border-gray-400 p-2">Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          {jobs.map((job) => (
+            <tr key={job._id} className="text-center">
+              <td className="border border-gray-400 p-2">{job.title}</td>
+              <td className="border border-gray-400 p-2">{job.company}</td>
+              <td className="border border-gray-400 p-2">
+                {new Date(job.createdAt).toLocaleDateString()}{" "}
+                {new Date(job.createdAt).toLocaleTimeString()}
+              </td>
+              <td className="border border-gray-400 p-2">
+                <select
+                  value={job.status}
+                  onChange={(e) => handleUpdateJob(job._id, e.target.value)}
+                  className="border border-gray-400 p-1 bg-neutral-100"
+                >
+                  <option value="Applied">Applied</option>
+                  <option value="Interviewing">Interviewing</option>
+                  <option value="Offered">Offered</option>
+                  <option  value="Rejected">Rejected</option>
+                </select>
+              </td>
+              <td className="border border-gray-400 p-2">
+                <button
+                  onClick={() => handleDeleteJob(job._id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:scale-105 hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

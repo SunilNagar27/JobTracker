@@ -18,16 +18,22 @@ const Register = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    
+    <form 
+    className=""
+    onSubmit={handleSubmit}>
       <h2>Register</h2>
+      <div className="flex flex-col items-center mt-3">
       <input
+      className="border mt-2 px-4 py-1 border-zinc-950"
         type="text"
-        placeholder="Name"
+        placeholder="Full Name"
         value={formData.name}
         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         required
       />
       <input
+       className="border mt-2 px-4 py-1 border-zinc-950"
         type="email"
         placeholder="Email"
         value={formData.email}
@@ -35,13 +41,16 @@ const Register = () => {
         required
       />
       <input
+       className="border mt-2 px-4 py-1 border-zinc-950"
         type="password"
         placeholder="Password"
         value={formData.password}
         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
         required
       />
-      <button type="submit">Register</button>
+      <button className="text-neutral-300 bg-zinc-950 mt-5 px-7 py-1 rounded-2xl" type="submit">Register</button>
+      </div>
+      
     </form>
   );
 };

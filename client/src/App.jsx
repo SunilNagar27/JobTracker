@@ -23,17 +23,24 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import JobList from "./components/JobList";
 import AtsChecker from "./components/atsChecker";
+import Navbar from "./components/navbar";
+import SearchJobs from "./pages/jobs";
 
 const App = () => {
   return (
-    <Router>
+    <div className="bg-slate-300 min-h-screen">
+      <Router>
+        <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/searchjobs" element={<SearchJobs />} />
         <Route path="/jobs" element={<JobList />} />
         <Route path="/ats-checker" element={<AtsChecker />} />
    
       </Routes>
     </Router>
+    </div>
+    
   );
 };
 
