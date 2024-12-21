@@ -9,6 +9,8 @@ import SearchJobs from "./pages/jobs";
 import LoginRegister from "./pages/loginRegistration";
 import Footer from "./components/footer";
 import PrivateRoute from "./components/privateRoute"; // Import the PrivateRoute component
+import Contact from "./pages/contact";
+import About from "./pages/about";
 
 const App = () => {
   return (
@@ -24,6 +26,8 @@ const App = () => {
             <Route path="/searchjobs" element={<PrivateRoute element={<SearchJobs />} />} />
             <Route path="/jobs" element={<PrivateRoute element={<JobList />} />} />
             <Route path="/ats-checker" element={<PrivateRoute element={<AtsChecker />} />} />
+            <Route path="/contact-us" element={<Contact />} />
+            <Route path="/about-us" element={<About />} />
           </Routes>
         </div>
         <Footer />
