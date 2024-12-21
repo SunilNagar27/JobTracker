@@ -1,46 +1,34 @@
-// import React from "react";
-// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// import Register from "./components/Register";
-// import Login from "./components/Login";
-// import JobList from "./components/JobList";
-
-// const App = () => {
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="/" element={<Register />} />
-//         <Route path="/login" element={<Login />} />
-//         <Route path="/jobs" element={<JobList />} />
-//       </Routes>
-//     </Router>
-//   );
-// };
-
-// export default App;
-
+// src/App.js
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./components/Home";
-import JobList from "./components/JobList";
-import AtsChecker from "./components/atsChecker";
+import Home from "./pages/home";
+import JobList from "./pages/JobList";
+import AtsChecker from "./pages/atsChecker";
 import Navbar from "./components/navbar";
 import SearchJobs from "./pages/jobs";
+import LoginRegister from "./pages/loginRegistration";
+import Footer from "./components/footer";
+import PrivateRoute from "./components/PrivateRoute"; // Import the PrivateRoute component
 
 const App = () => {
   return (
-    <div className="bg-slate-300 min-h-screen">
+    <div className="bg-primary min-h-screen flex flex-col">
       <Router>
         <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/searchjobs" element={<SearchJobs />} />
-        <Route path="/jobs" element={<JobList />} />
-        <Route path="/ats-checker" element={<AtsChecker />} />
-   
-      </Routes>
-    </Router>
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<LoginRegister />} />
+
+            {/* Use PrivateRoute for routes that require authentication */}
+            <Route path="/searchjobs" element={<PrivateRoute element={<SearchJobs />} />} />
+            <Route path="/jobs" element={<PrivateRoute element={<JobList />} />} />
+            <Route path="/ats-checker" element={<PrivateRoute element={<AtsChecker />} />} />
+          </Routes>
+        </div>
+        <Footer />
+      </Router>
     </div>
-    
   );
 };
 

@@ -48,66 +48,82 @@ const SearchJobs = () => {
                         : '';
 
 
-    return (
-        <div>
-            <p className='font-semibold text-center text-zinc-950 p-4 text-3xl mt-5'>Search Jobs</p>
-            <div className='flex flex-row  justify-end mr-4 gap-4 '>
-                <input value={search} onChange={(e) => setSearch(e.target.value)} className="border border-slate-600 p-1" type="text" placeholder='Enter Role' />
-                <p onClick={handleClick} className='text-zinc-950 border px-4 py-1 cursor-pointer hover:scale-105 hover:bg-blue-600 bg-blue-500'>Search</p>
-            </div>
-
-            {/* Job Lists */}
-
-            {
-                submittedSearch && (
-                    <>
-                        <div className='flex flex-col border bg-neutral-200 mt-10 p-7'>
-                            <div className='flex flex-row items-center'>
-                                <div>
-                                    <p className='font-semibold text-zinc-950 text-2xl'>Jobs For: {submittedSearch}</p>
-                                    <p className='text-gray-700 text-lg mt-5'>
-                                        Discover the latest job openings for <strong>{submittedSearch}</strong> on Unstop! Don't miss out – be the first to grab the opportunity and apply today.
+                        return (
+                            <div>
+                                <p className='font-semibold text-center text-neutral p-4 text-3xl mt-5'>Search Jobs</p>
+                                <div className='flex flex-col sm:flex-row justify-end sm:mr-4 gap-4 p-4'>
+                                    <input
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        className="bg-secondary text-neutral placeholder-neutral-200 border border-slate-600 px-3 p-1 w-full sm:w-auto"
+                                        type="text"
+                                        placeholder='Enter Role'
+                                    />
+                                    <p
+                                        onClick={handleClick}
+                                        className='text-zinc-950 px-4 py-1 cursor-pointer hover:scale-105 bg-teal-500 hover:bg-teal-600 text-center'
+                                    >
+                                        Search
                                     </p>
                                 </div>
-                                <button onClick={() => window.open(Unstop, '_blank')} className='bg-blue-500 text-white px-6 py-2 rounded-3xl hover:scale-105 hover:bg-blue-600 ml-auto'>
-                                    Apply Now
-                                </button>
+                        
+                                {submittedSearch && (
+                                    <div className='flex flex-col items-center justify-center w-full min-h-[50vh] gap-6'>
+                                        <div className='flex flex-col border-black shadow-teal-700 shadow-sm w-full sm:w-10/12 rounded-xl bg-secondary mt-10 p-7'>
+                                            <div className='flex flex-col sm:flex-row items-start sm:items-center'>
+                                                <div>
+                                                    <p className='font-semibold text-neutral-200 text-2xl'>Jobs For: {submittedSearch}</p>
+                                                    <p className='text-neutral-300 text-md mt-5'>
+                                                        Discover the latest job openings for <strong>{submittedSearch}</strong> on Unstop! Don't miss out – be the first to grab the opportunity and apply today.
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => window.open(Unstop, '_blank')}
+                                                    className='bg-teal-500 text-zinc-950 hover:bg-teal-600 px-6 py-2 rounded-3xl hover:scale-105 mt-4 sm:mt-0 sm:ml-auto'
+                                                >
+                                                    Apply Now
+                                                </button>
+                                            </div>
+                                        </div>
+                        
+                                        <div className='flex flex-col border-black shadow-teal-700 shadow-sm w-full sm:w-10/12 rounded-xl bg-secondary mt-10 p-7'>
+                                            <div className='flex flex-col sm:flex-row items-start sm:items-center'>
+                                                <div>
+                                                    <p className='font-semibold text-neutral-200 text-2xl'>Jobs For: {submittedSearch}</p>
+                                                    <p className='text-neutral-300 text-md mt-5'>
+                                                        Discover the latest job openings for <strong>{submittedSearch}</strong> on Indeed! Don't miss out – be the first to grab the opportunity and apply today.
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => window.open(Indeed, '_blank')}
+                                                    className='bg-teal-500 text-zinc-950 hover:bg-teal-600 px-6 py-2 rounded-3xl hover:scale-105 mt-4 sm:mt-0 sm:ml-auto'
+                                                >
+                                                    Apply Now
+                                                </button>
+                                            </div>
+                                        </div>
+                        
+                                        <div className='flex flex-col border-black shadow-teal-700 shadow-sm w-full sm:w-10/12 rounded-xl bg-secondary mt-10 p-7'>
+                                            <div className='flex flex-col sm:flex-row items-start sm:items-center'>
+                                                <div>
+                                                    <p className='font-semibold text-neutral-200 text-2xl'>Jobs For: {submittedSearch}</p>
+                                                    <p className='text-neutral-300 text-md mt-5'>
+                                                        Discover the latest job openings for <strong>{submittedSearch}</strong> on Naukri! Don't miss out – be the first to grab the opportunity and apply today.
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => window.open(Naukri, '_blank')}
+                                                    className='bg-teal-500 text-zinc-950 hover:bg-teal-600 px-6 py-2 rounded-3xl hover:scale-105 mt-4 sm:mt-0 sm:ml-auto'
+                                                >
+                                                    Apply Now
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        </div>
-
-                        <div className='flex flex-col border bg-neutral-200 mt-5 p-7'>
-                            <div className='flex flex-row items-center'>
-                                <div>
-                                    <p className='font-semibold text-zinc-950 text-2xl'>Jobs For: {submittedSearch}</p>
-                                    <p className='text-gray-700 text-lg mt-5'>
-                                        Discover the latest job openings for <strong>{submittedSearch}</strong> on Indeed! Don't miss out – be the first to grab the opportunity and apply today.
-                                    </p>
-                                </div>
-                                <button onClick={() => window.open(Indeed, '_blank')} className='bg-blue-500 text-white px-6 py-2 rounded-3xl hover:scale-105  hover:bg-blue-600 ml-auto'>
-                                    Apply Now
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className='flex flex-col border bg-neutral-200 mt-5 p-7'>
-                            <div className='flex flex-row items-center'>
-                                <div>
-                                    <p className='font-semibold text-zinc-950 text-2xl'>Jobs For: {submittedSearch}</p>
-                                    <p className='text-gray-700 text-lg mt-5'>
-                                        Discover the latest job openings for <strong>{submittedSearch}</strong> on Naukri! Don't miss out – be the first to grab the opportunity and apply today.
-                                    </p>
-                                </div>
-                                <button onClick={() => window.open(Naukri, '_blank')} className='bg-blue-500 text-white px-6 py-2 rounded-3xl hover:scale-105  hover:bg-blue-600 ml-auto'>
-                                    Apply Now
-                                </button>
-                            </div>
-                        </div>
-                    </>
-                )
-            }
-
-        </div>
-    )
+                        );
+                        
 }
 
 export default SearchJobs

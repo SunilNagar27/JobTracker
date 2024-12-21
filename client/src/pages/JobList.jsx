@@ -61,12 +61,12 @@ const JobList = () => {
 
   return (
     <div>
-      
-      <h2 className="text-zinc-950 font-semibold text-4xl text-center mt-4 p-3">Manage Applications</h2>
+
+      <h2 className="text-neutral font-semibold text-4xl text-center mt-4 p-3">Manage Applications</h2>
       <form onSubmit={handleCreateJob}>
         <div className="flex mt-4 flex-row gap-4 justify-end mr-4">
           <input
-            className="border border-slate-600 p-1"
+            className=" bg-secondary placeholder-neutral-200 text-neutral border border-slate-600 px-3 p-1"
             type="text"
             placeholder="Job Title"
             value={newJob.title}
@@ -74,19 +74,19 @@ const JobList = () => {
             required
           />
           <input
-            className="border border-slate-600 p-1"
+            className="bg-secondary placeholder-neutral-200 text-neutral border border-slate-600 px-3 p-1"
             type="text"
             placeholder="Company"
             value={newJob.company}
             onChange={(e) => setNewJob({ ...newJob, company: e.target.value })}
             required
           />
-          <button className="bg-blue-500 px-5 hover:bg-blue-600 hover:scale-105" type="submit">Add Job</button>
+          <button className=" bg-teal-500 hover:bg-teal-600 px-5 hover:scale-105 text-zinc-800 " type="submit">Add Job</button>
         </div>
       </form>
       <table className="table-auto border-collapse border border-gray-400 w-full mt-5">
         <thead>
-          <tr className="bg-zinc-950 text-white">
+          <tr className="bg-slate-700 text-neutral">
             <th className="border border-gray-400 p-2">Job Title</th>
             <th className="border border-gray-400 p-2">Company</th>
             <th className="border border-gray-400 p-2">Date</th>
@@ -97,9 +97,9 @@ const JobList = () => {
         <tbody>
           {jobs.map((job) => (
             <tr key={job._id} className="text-center">
-              <td className="border border-gray-400 p-2">{job.title}</td>
-              <td className="border border-gray-400 p-2">{job.company}</td>
-              <td className="border border-gray-400 p-2">
+              <td className="border text-neutral border-gray-400 p-2">{job.title}</td>
+              <td className="border text-neutral border-gray-400 p-2">{job.company}</td>
+              <td className="border text-neutral border-gray-400 p-2">
                 {new Date(job.createdAt).toLocaleDateString()}{" "}
                 {new Date(job.createdAt).toLocaleTimeString()}
               </td>
@@ -112,7 +112,7 @@ const JobList = () => {
                   <option value="Applied">Applied</option>
                   <option value="Interviewing">Interviewing</option>
                   <option value="Offered">Offered</option>
-                  <option  value="Rejected">Rejected</option>
+                  <option value="Rejected">Rejected</option>
                 </select>
               </td>
               <td className="border border-gray-400 p-2">
