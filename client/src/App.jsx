@@ -8,7 +8,7 @@ import Navbar from "./components/navbar";
 import SearchJobs from "./pages/jobs";
 import LoginRegister from "./pages/loginRegistration";
 import Footer from "./components/footer";
-import PrivateRoute from "./components/PrivateRoute"; // Import the PrivateRoute component
+import PrivateRoute from "./components/privateRoute"; // Import the PrivateRoute component
 
 const App = () => {
   return (
