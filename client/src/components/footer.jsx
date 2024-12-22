@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <div className="bg-neutral-950 text-neutral-200 py-4">
       <div className="flex flex-col md:flex-row items-center justify-between">
@@ -17,12 +19,12 @@ const Footer = () => {
         {/* Right Section: Links */}
         <div className="flex flex-col md:flex-row items-center mr-5 gap-4 md:gap-6">
           
-          <a href="/about-us" className="text-neutral-400 hover:text-teal-500">
+          <p onClick={()=>navigate("/about-us")} className="text-neutral-400 cursor-pointer hover:text-teal-500">
             About us
-          </a>
-          <a href="/contact-us" className="text-neutral-400 hover:text-teal-500">
+          </p>
+          <p onClick={()=>navigate("/contact-us")} className="text-neutral-400 cursor-pointer hover:text-teal-500">
             Contact Us
-          </a>
+          </p>
         </div>
         
       </div>

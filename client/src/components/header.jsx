@@ -35,7 +35,7 @@ const Header = () => {
       </div>
 
       <div className="md:w-3/5 flex justify-center mt-10 md:mt-0">
-        <div className="rounded-md flex items-center justify-center">
+        <div className="rounded-md flex items-center justify-center ">
           <img src={develop} alt="Job Illustration" className="w-full max-w-[600px] h-[500px]" />
         </div>
       </div>
