@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import develop from '../assets/develop.svg';
+import { AuthContext } from '@/contexts/authcontext';
 
 const Header = () => {
   const navigate = useNavigate();
+  const {isLoggedIn} = useContext(AuthContext)
 
   // Function to scroll a little bit with smoothness
   const scrollToFeatures = () => {
