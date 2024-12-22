@@ -33,7 +33,7 @@ const ATSChecker = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-900 text-neutral-200 overflow-hidden">
       <div className="w-full max-w-lg p-8 bg-secondary shadow-lg rounded-xl mb-7">
-        <h1 className="text-3xl font-semibold mb-5 text-center">ATS Checker</h1>
+        <h1 className="text-teal-500 font-semibold text-4xl text-center mb-6">ATS Checker</h1>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <textarea
             rows="6"

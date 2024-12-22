@@ -1,8 +1,5 @@
 import React from "react";
 
-import { Router, Route, Link } from "wouter";
-import Home from "@/pages/home";
-
 const Footer = () => {
   return (
     <div className="bg-neutral-950 text-neutral-200 py-4">

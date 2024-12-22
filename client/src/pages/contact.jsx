@@ -1,187 +1,81 @@
-// import emailjs from "@emailjs/browser";
-// import { Suspense, useRef, useState } from "react";
-
-
-// import useAlert from "@/hooks/useAlert";
-// import Alert from "@/components/Alert";
-// const Contact = () => {
-//   const formRef = useRef();
-//   const [form, setForm] = useState({ name: "", email: "", message: "" });
-//   const { alert, showAlert, hideAlert } = useAlert();
-//   const [loading, setLoading] = useState(false);
-//   const [currentAnimation, setCurrentAnimation] = useState("idle");
-
-//   const handleChange = ({ target: { name, value } }) => {
-//     setForm({ ...form, [name]: value });
-//   };
-
-//   const handleFocus = () => setCurrentAnimation("walk");
-//   const handleBlur = () => setCurrentAnimation("idle");
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     setCurrentAnimation("hit");
-
-//     emailjs
-//       .send(
-//         import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
-//         import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
-//         {
-//           from_name: form.name,
-//           to_name: "JavaScript Mastery",
-//           from_email: form.email,
-//           to_email: "sujata@jsmastery.pro",
-//           message: form.message,
-//         },
-//         import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
-//       )
-//       .then(
-//         () => {
-//           setLoading(false);
-//           showAlert({
-//             show: true,
-//             text: "Thank you for your message 😃",
-//             type: "success",
-//           });
-
-//           setTimeout(() => {
-//             hideAlert(false);
-//             setCurrentAnimation("idle");
-//             setForm({
-//               name: "",
-//               email: "",
-//               message: "",
-//             });
-//           }, [3000]);
-//         },
-//         (error) => {
-//           setLoading(false);
-//           console.error(error);
-//           setCurrentAnimation("idle");
-
-//           showAlert({
-//             show: true,
-//             text: "I didn't receive your message 😢",
-//             type: "danger",
-//           });
-//         }
-//       );
-//   };
-
-//   return (
-//     <>
-//     <section className='relative flex lg:flex-row flex-col max-container'>
-//       {alert.show && <Alert {...alert} />}
-
-//       <div className='flex-1 min-w-[50%] flex flex-col'>
-//         <h1 className='head-text'>Get in Touch</h1>
-
-//         <form
-//           ref={formRef}
-//           onSubmit={handleSubmit}
-//           className='w-full flex flex-col gap-7 mt-14'
-//         >
-//           <label className='text-black-500 font-semibold'>
-//             Name
-//             <input
-//               type='text'
-//               name='name'
-//               className='input'
-//               placeholder='John'
-//               required
-//               value={form.name}
-//               onChange={handleChange}
-//               onFocus={handleFocus}
-//               onBlur={handleBlur}
-//             />
-//           </label>
-//           <label className='text-black-500 font-semibold'>
-//             Email
-//             <input
-//               type='email'
-//               name='email'
-//               className='input'
-//               placeholder='John@gmail.com'
-//               required
-//               value={form.email}
-//               onChange={handleChange}
-//               onFocus={handleFocus}
-//               onBlur={handleBlur}
-//             />
-//           </label>
-//           <label className='text-black-500 font-semibold'>
-//             Your Message
-//             <textarea
-//               name='message'
-//               rows='4'
-//               className='textarea'
-//               placeholder='Write your thoughts here...'
-//               value={form.message}
-//               onChange={handleChange}
-//               onFocus={handleFocus}
-//               onBlur={handleBlur}
-//             />
-//           </label>
-
-//           <button
-//             type='submit'
-//             disabled={loading}
-//             className='btn'
-//             onFocus={handleFocus}
-//             onBlur={handleBlur}
-//           >
-//             {loading ? "Sending..." : "Submit"}
-//           </button>
-//         </form>
-//       </div>
-
-  
-     
-//     </section>
-//     {/* <Footer /> */}
-//     </>
-    
-//   );
-// };
-
-// export default Contact;
-
-
 import React, { useRef } from 'react';
 import emailjs from '@emailjs/browser';
-import './contact.css'
+
 const ContactForm = () => {
   const form = useRef();
 
   const sendEmail = (e) => {
     e.preventDefault();
 
-    emailjs.sendForm(import.meta.env.VITE_APP_EMAILJS_SERVICE_ID, import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID, form.current, import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY)
-      .then((result) => {
+    emailjs
+      .sendForm(
+        import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
+        form.current,
+        import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
+      )
+      .then(
+        (result) => {
           console.log(result.text);
           alert('Message sent successfully!');
-      }, (error) => {
+        },
+        (error) => {
           console.log(error.text);
           alert('An error occurred, please try again.');
-      });
+        }
+      );
 
     e.target.reset();
   };
 
   return (
-    <form ref={form} onSubmit={sendEmail} className="contact-form">
-      <label>Name</label>
-      <input type="text" name="user_name" required />
+    <div className="flex min-h-screen px-8">
+      {/* Left Section - Contact Form */}
+      <form
+        ref={form}
+        onSubmit={sendEmail}
+        className="w-full max-w-lg bg-gray-900 rounded-xl shadow-lg p-8 my-auto"
+      >
+        <h2 className="text-3xl text-center text-teal-400 font-semibold mb-6">
+          Get In Touch !!
+        </h2>
+        <div className="flex flex-col gap-5">
+          <input
+            className="w-full px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            placeholder="Full Name"
+            type="text"
+            name="user_name"
+            required
+          />
+          <input
+            className="w-full px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            type="email"
+            placeholder="Enter your email"
+            name="user_email"
+            required
+          />
+          <textarea
+            className="w-full px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            placeholder="Type your message"
+            name="message"
+            rows="5"
+            required
+          />
+          <button
+            className="w-full px-4 py-2 bg-teal-500 text-gray-900 rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all"
+            type="submit"
+          >
+            Send
+          </button>
+        </div>
+      </form>
 
-      <label>Email</label>
-      <input type="email" name="user_email" required />
-
-      <label>Message</label>
-      <textarea name="message" required />
-
-      <input type="submit" value="Send" />
-    </form>
+      {/* Right Section - Reserved for SVG */}
+      <div className="hidden md:flex flex-grow items-center justify-center">
+        {/* Add your SVG here later */}
+        <p className="text-gray-600">SVG or Illustration Placeholder</p>
+      </div>
+    </div>
   );
 };
 

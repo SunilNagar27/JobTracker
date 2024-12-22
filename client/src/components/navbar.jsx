@@ -91,19 +91,19 @@ const Navbar = () => {
                         <div className="hidden sm:flex">
                             <p
                                 onClick={() => navigate('/searchjobs')}
-                                className="text-lg mr-5 hover:scale-105 cursor-pointer"
+                                className="text-lg text-neutral-300 hover:text-neutral-400 mr-5 hover:scale-105 cursor-pointer"
                             >
                                 Search Jobs
                             </p>
                             <p
                                 onClick={() => navigate('/jobs')}
-                                className="text-lg mr-5 hover:scale-105 cursor-pointer"
+                                className="text-lg text-neutral-300 hover:text-neutral-400 mr-5 hover:scale-105 cursor-pointer"
                             >
                                 My Jobs
                             </p>
                             <p
                                 onClick={() => navigate('/ats-checker')}
-                                className="text-lg mr-5 hover:scale-105 cursor-pointer"
+                                className="text-lg text-neutral-300 hover:text-neutral-400 mr-5 hover:scale-105 cursor-pointer"
                             >
                                 ATS Checker
                             </p>

@@ -16,7 +16,7 @@ const Header = () => {
   return (
     <div className="text-neutral-200 flex flex-col md:flex-row items-center justify-between px-8 py-16 sm:px-12 md:py-20">
       <div className="md:w-2/5">
-        <p className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
+        <p className="text-3xl text-neutral-200 sm:text-4xl md:text-5xl font-bold mb-6">
           Your Ultimate <span className="text-teal-500">Job</span> Application Assistant
         </p>
 

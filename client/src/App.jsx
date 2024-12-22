@@ -14,7 +14,7 @@ import About from "./pages/about";
 
 const App = () => {
   return (
-    <div className="bg-primary min-h-screen flex flex-col">
+    <div className="bg-gray-900 min-h-screen flex flex-col">
       <Router>
         <Navbar />
         <div className="flex-grow">
