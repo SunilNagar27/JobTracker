@@ -33,7 +33,7 @@ const ATSChecker = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-900 text-neutral-200 overflow-hidden">
       <div className="w-full max-w-lg p-8 bg-secondary shadow-lg rounded-xl mb-7">
-        <h1 className="text-3xl font-semibold mb-5 text-center">ATS Checker</h1>
+        <h1 className="text-3xl font-semibold text-teal-500 mb-5 text-center">ATS Checker</h1>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <textarea
             rows="6"
@@ -61,8 +61,8 @@ const ATSChecker = () => {
 
         {atsScore !== null && (
           <div className="mt-6 text-center">
-            <h3 className="text-xl font-semibold">ATS Score: {atsScore}%</h3>
-            <p className="mt-2">
+            <h3 className="text-xl text-teal-500 font-semibold">ATS Score: {atsScore}%</h3>
+            <p className="mt-2 text-neutral-200">
               <strong>Matched Keywords:</strong>{" "}
               {matchedKeywords.length > 0 ? matchedKeywords.join(", ") : "None"}
             </p>

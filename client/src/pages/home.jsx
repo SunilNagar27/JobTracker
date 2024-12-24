@@ -5,6 +5,7 @@ import Features from "@/components/features";
 import HowItWorks from "@/components/howitworks";
 import Testimonial from "./testimonial";
 
+
 const Home = () => {
   return (
     <>

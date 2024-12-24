@@ -12,6 +12,7 @@ import PrivateRoute from "./components/privateRoute"; // Import the PrivateRoute
 import Contact from "./pages/contact";
 import About from "./pages/about";
 import Chatbot from "./components/Chatbot";
+import NotFound from "./components/notFound";
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/contact-us" element={<Contact />} />
             <Route path="/about-us" element={<About />} />
             <Route path="/chatbot" element={<Chatbot />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
         <Chatbot/>

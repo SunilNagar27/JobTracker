@@ -1,13 +1,15 @@
 import React from 'react';
 import '@/pages/about.css'
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import developerImage from '../assets/developer.jpg'
 const About = () => {
   return (
     <div className="about-container">
       <section className="intro">
         <h1>About Us</h1>
         <p>
-          Welcome to [Your Company Name]. We are dedicated to providing exceptional services to our clients, driven by our core values and a passion for excellence.
+          Welcome to JobTracker. We are team of two members who just want to help community through our open source projects.
         </p>
       </section>
 
@@ -21,7 +23,7 @@ const About = () => {
         <div className="vision">
           <h2>Our Vision</h2>
           <p>
-            To be a global leader in our industry, recognized for our commitment to quality and integrity.
+            To provide open source projects to our customers and maintaining them for a long period of time
           </p>
         </div>
       </section>
@@ -30,16 +32,36 @@ const About = () => {
         <h2>Meet Our Team</h2>
         <div className="team-members">
           <div className="team-member">
-            <img src="path-to-image.jpg" alt="Team Member" />
-            <h3>John Doe</h3>
-            <p>CEO & Founder</p>
-            <p>Harvard University, MBA</p>
+            <img className='display-flex' src={developerImage} alt="Team Member" />
+            <h3>Sunil Nagar</h3>
+            <a
+        href="https://www.linkedin.com/in/sunilnagarhere/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: "inline-block", marginTop: "20px" }}
+      >
+        <FontAwesomeIcon
+          icon={faLinkedin}
+          style={{ fontSize: "40px", color: "#0077b5" }}
+        />
+      </a>
+            <p>Acropolis Institute of Technology and Research, Btech</p>
           </div>
           <div className="team-member">
-            <img src="path-to-image.jpg" alt="Team Member" />
-            <h3>Jane Smith</h3>
-            <p>Chief Technology Officer</p>
-            <p>MIT, B.Sc. Computer Science</p>
+            <img src={developerImage} alt="Team Member" />
+            <h3>Tanish Kumar Gaur</h3>
+            <a
+        href="https://www.linkedin.com/in/tanish-gaur/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: "inline-block", marginTop: "20px" }}
+      >
+        <FontAwesomeIcon
+          icon={faLinkedin}
+          style={{ fontSize: "40px", color: "#0077b5" }}
+        />
+      </a>
+            <p>Acropolis Institute of Technology and Research, Btech</p>
           </div>
           {/* Add more team members as needed */}
         </div>
@@ -50,7 +72,7 @@ const About = () => {
         <p>
           Our team comprises graduates from prestigious institutions, bringing a wealth of knowledge and expertise to our company.
         </p>
-        <ul>
+        <ul className='text-neutral-300'>
           <li>Harvard University</li>
           <li>Massachusetts Institute of Technology (MIT)</li>
           <li>Stanford University</li>

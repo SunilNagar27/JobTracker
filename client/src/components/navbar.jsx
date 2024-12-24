@@ -53,7 +53,7 @@ const Navbar = () => {
                                         navigate('/searchjobs');
                                         setMenuOpen(false);
                                     }}
-                                    className="text-lg px-4 py-2 w-full hover:bg-teal-600 cursor-pointer"
+                                    className="text-lg px-4 text-neutral-100 py-2 w-full hover:bg-teal-600 cursor-pointer"
                                 >
                                     Search Jobs
                                 </p>
@@ -62,7 +62,7 @@ const Navbar = () => {
                                         navigate('/jobs');
                                         setMenuOpen(false);
                                     }}
-                                    className="text-lg px-4 py-2 w-full hover:bg-teal-600 cursor-pointer"
+                                    className="text-lg text-neutral-100 px-4 py-2 w-full hover:bg-teal-600 cursor-pointer"
                                 >
                                     My Jobs
                                 </p>
@@ -71,7 +71,7 @@ const Navbar = () => {
                                         navigate('/ats-checker');
                                         setMenuOpen(false);
                                     }}
-                                    className="text-lg px-4 py-2 w-full hover:bg-teal-600 cursor-pointer"
+                                    className="text-lg  text-neutral-100 px-4 py-2 w-full hover:bg-teal-600 cursor-pointer"
                                 >
                                     ATS Checker
                                 </p>
@@ -80,7 +80,7 @@ const Navbar = () => {
                                         handleLogout();
                                         setMenuOpen(false);
                                     }}
-                                    className="text-lg px-4 py-2 w-full hover:bg-teal-600 cursor-pointer"
+                                    className="text-lg px-4 py-2 w-full text-teal-500 hover:bg-teal-600 cursor-pointer"
                                 >
                                     Logout
                                 </p>
@@ -91,19 +91,19 @@ const Navbar = () => {
                         <div className="hidden sm:flex">
                             <p
                                 onClick={() => navigate('/searchjobs')}
-                                className="text-lg mr-5 hover:scale-105 cursor-pointer"
+                                className="text-lg mr-5 hover:scale-105 cursor-pointer text-neutral-100"
                             >
                                 Search Jobs
                             </p>
                             <p
                                 onClick={() => navigate('/jobs')}
-                                className="text-lg mr-5 hover:scale-105 cursor-pointer"
+                                className="text-lg mr-5 hover:scale-105 cursor-pointer text-neutral-100"
                             >
                                 My Jobs
                             </p>
                             <p
                                 onClick={() => navigate('/ats-checker')}
-                                className="text-lg mr-5 hover:scale-105 cursor-pointer"
+                                className="text-lg mr-5 hover:scale-105 cursor-pointer text-neutral-100"
                             >
                                 ATS Checker
                             </p>
