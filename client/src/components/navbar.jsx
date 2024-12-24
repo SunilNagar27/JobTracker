@@ -91,31 +91,20 @@ const Navbar = () => {
                         <div className="hidden sm:flex">
                             <p
                                 onClick={() => navigate('/searchjobs')}
-<<<<<<< HEAD
-                                className="text-lg text-neutral-300 hover:text-neutral-400 mr-5 hover:scale-105 cursor-pointer"
-=======
+
                                 className="text-lg mr-5 hover:scale-105 cursor-pointer text-neutral-100"
->>>>>>> bd7562c70b1d7b5cbc5b30f0dc421f693d4d7801
                             >
                                 Search Jobs
                             </p>
                             <p
                                 onClick={() => navigate('/jobs')}
-<<<<<<< HEAD
-                                className="text-lg text-neutral-300 hover:text-neutral-400 mr-5 hover:scale-105 cursor-pointer"
-=======
                                 className="text-lg mr-5 hover:scale-105 cursor-pointer text-neutral-100"
->>>>>>> bd7562c70b1d7b5cbc5b30f0dc421f693d4d7801
                             >
                                 My Jobs
                             </p>
                             <p
                                 onClick={() => navigate('/ats-checker')}
-<<<<<<< HEAD
-                                className="text-lg text-neutral-300 hover:text-neutral-400 mr-5 hover:scale-105 cursor-pointer"
-=======
                                 className="text-lg mr-5 hover:scale-105 cursor-pointer text-neutral-100"
->>>>>>> bd7562c70b1d7b5cbc5b30f0dc421f693d4d7801
                             >
                                 ATS Checker
                             </p>
