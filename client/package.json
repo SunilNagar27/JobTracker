@@ -32,8 +32,11 @@
     "wouter": "^3.3.5"
   },
   "scripts": {
-    "start": "vite --host",
-    "build": "tsc && vite build"
+    "dev":"vite --host 0.0.0.0",
+    "build": "vite build",
+    "lint":"eslint . --ext js, jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+
   },
   "eslintConfig": {
     "extends": [
