@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { AuthContext } from '../contexts/authcontext'; // Import AuthContext
 import develop from '../assets/develop.svg';
 
 const Header = () => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useContext(AuthContext); // Accessing the login state from context
 
   // Function to scroll a little bit with smoothness
   const scrollToFeatures = () => {
@@ -58,14 +60,16 @@ const Header = () => {
         </p>
 
         <div className="flex flex-row gap-4">
-          <motion.button
-            onClick={() => navigate('/register')}
-            className="bg-teal-500 hover:bg-teal-600 text-zinc-950 font-semibold px-6 py-3 rounded-md text-lg hover:scale-105"
-            whileHover={{ scale: 1.1 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            Get Started
-          </motion.button>
+          {!isLoggedIn && ( // Only show the "Get Started" button if not logged in
+            <motion.button
+              onClick={() => navigate('/register')}
+              className="bg-teal-500 hover:bg-teal-600 text-zinc-950 font-semibold px-6 py-3 rounded-md text-lg hover:scale-105"
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              Get Started
+            </motion.button>
+          )}
           <motion.button
             onClick={scrollToFeatures}
             className="bg-transparent border border-teal-500 hover:bg-teal-500 text-teal-500 hover:text-zinc-950 font-semibold px-6 py-3 rounded-md text-lg hover:scale-105"

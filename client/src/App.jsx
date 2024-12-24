@@ -11,8 +11,7 @@ import Footer from "./components/footer";
 import PrivateRoute from "./components/privateRoute"; // Import the PrivateRoute component
 import Contact from "./pages/contact";
 import About from "./pages/about";
-import Chatbot from "./components/Chatbot";
-import NotFound from "./components/notFound";
+import NotFound from "./pages/notFound";
 
 const App = () => {
   return (
@@ -30,11 +29,9 @@ const App = () => {
             <Route path="/ats-checker" element={<PrivateRoute element={<AtsChecker />} />} />
             <Route path="/contact-us" element={<Contact />} />
             <Route path="/about-us" element={<About />} />
-            <Route path="/chatbot" element={<Chatbot />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
-        <Chatbot/>
         <Footer />
       </Router>
     </div>

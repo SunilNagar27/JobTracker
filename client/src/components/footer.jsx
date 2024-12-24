@@ -20,7 +20,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center mr-5 gap-4 md:gap-6">
           
           <p onClick={()=>navigate("/about-us")} className="text-neutral-400 cursor-pointer hover:text-teal-500">
-            About us
+            About Us
           </p>
           <p onClick={()=>navigate("/contact-us")} className="text-neutral-400 cursor-pointer hover:text-teal-500">
             Contact Us

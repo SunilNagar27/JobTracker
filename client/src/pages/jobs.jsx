@@ -71,10 +71,13 @@ const SearchJobs = () => {
           Search
         </p>
       </div>
+      {
+        
+      }
 
       {loading && <Loader />} {/* Display the loader while loading */}
 
-      {submittedSearch && !loading && (
+      {submittedSearch && !loading ? (
         <div className="flex flex-col items-center justify-center w-full min-h-[50vh] gap-6">
           <div className="overflow-auto max-h-[70vh] w-full sm:w-10/12 flex flex-col gap-6">
             <div className="flex flex-col border-black shadow-teal-700 shadow-sm rounded-xl bg-primary p-5">
@@ -129,6 +132,11 @@ const SearchJobs = () => {
             </div>
           </div>
         </div>
+      ):
+      (
+        <div>
+          <p className='text-center text-neutral-300 mt-20 text-xl font-semibold'>Explore Job Listings for Your Ideal Role</p>
+          </div>
       )}
     </div>
   );
