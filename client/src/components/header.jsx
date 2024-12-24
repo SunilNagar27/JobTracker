@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AuthContext } from '../contexts/authcontext'; // Import AuthContext
 import develop from '../assets/develop.svg';
+import { AuthContext } from '@/contexts/authcontext';
 
 const Header = () => {
   const navigate = useNavigate();
