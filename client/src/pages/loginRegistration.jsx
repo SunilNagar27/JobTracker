@@ -29,8 +29,8 @@ const LoginRegister = () => {
             setLogin(true); // Switch to login form after registration
         } catch (err) {
             alert(err.response.data.message || "Something went wrong.");
-        }
-    };
+            }
+        };
 
     return (
         <div className="flex items-center justify-center min-h-screen">
