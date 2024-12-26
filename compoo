@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  img:
+    image: g4ur/jobtracker-server
+    ports:
+      - "5000:5000"
+    networks:
+      - mern
+
+  imgg:
+    image: g4ur/jobtracker-client
+    ports:
+      - "3000:3000"
+    networks:
+      - mern
+
+networks:
+  mern:
+    driver: bridge

@@ -1,3 +1,35 @@
+# version: '3.8'
+
+# services:
+#   client:
+#     build:
+#       context: ./client
+#       dockerfile: Dockerfile
+#     ports:
+#       - "3000:3000"
+#     env_file:
+#       - ./client/.env
+#     networks:
+#       - mern-network  
+
+#   server:
+#     build:
+#       context: ./server
+#       dockerfile: Dockerfile
+#     ports:
+#       - "5000:5000"
+#     env_file:
+#       - ./server/.env
+
+#     networks:
+#       - mern-network  
+
+# networks:
+#   mern-network:
+#     driver: bridge
+
+
+
 version: '3.8'
 
 services:
@@ -20,13 +52,9 @@ services:
       - "5000:5000"
     env_file:
       - ./server/.env
-
     networks:
       - mern-network  
 
 networks:
   mern-network:
     driver: bridge
-
-
-      
