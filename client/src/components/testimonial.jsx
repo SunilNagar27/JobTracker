@@ -57,29 +57,24 @@ const Testimonial = () => {
             >
               {[ 
                 {
-                  name: "Leslie Alexander",
-                  profession: "Freelance React Developer",
-                  image:
-                    "https://cdn.rareblocks.xyz/collection/clarity/images/testimonial/4/avatar-male-1.png",
-                  feedback:
-                    "“You made it so simple. My new site is so much faster and easier to work with than my old site. I just choose the page, make the change.”",
+                  name: "Utsav Patidar",
+                  profession: "Software Engineer",
+                  image: "https://cdn.rareblocks.xyz/collection/clarity/images/testimonial/4/avatar-male-1.png",
+                  feedback: "“Jobtracker has completely transformed my job search. The ATS checker helped me optimize my resume, and the job tracking system kept me organized throughout the entire process. Highly recommend!”",
                 },
                 {
-                  name: "Jacob Jones",
-                  profession: "Digital Marketer",
-                  image:
-                    "https://cdn.rareblocks.xyz/collection/clarity/images/testimonial/4/avatar-male-2.png",
-                  feedback:
-                    "“Simply the best. Better than all the rest. I’d recommend this product to beginners and advanced users.”",
+                  name: "Priya Sharma",
+                  profession: "Marketing Specialist",
+                  image: "https://cdn.rareblocks.xyz/collection/clarity/images/testimonial/4/avatar-female.png", 
+                  feedback: "“Using Jobtracker was a game-changer for me. I could easily track all my job applications and keep track of my progress. It made the process so much smoother and less stressful!”",
                 },
                 {
-                  name: "Emily R. Becker",
-                  profession: "UI/UX Designer",
-                  image:
-                    "https://cdn.rareblocks.xyz/collection/clarity/images/testimonial/4/avatar-female.png",
-                  feedback:
-                    "“Rareblocks makes my design process much faster and the output looks great every time!”",
+                  name: "Ravi Gupta",
+                  profession: "Data Analyst",
+                  image: "https://cdn.rareblocks.xyz/collection/clarity/images/testimonial/4/avatar-male-2.png",
+                  feedback: "“The job application tracker on Jobtracker helped me stay organized and keep all the details in one place. The ATS checker also helped me tailor my resume for each job role. A must-have for job seekers!”",
                 },
+                
               ].map((testimonial, index) => (
                 <motion.div
                   key={index}

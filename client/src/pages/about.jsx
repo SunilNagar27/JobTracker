@@ -18,13 +18,13 @@ const About = () => {
         <div className="mission flex-1 bg-gray-800 p-6 rounded-xl shadow-lg">
           <h2 className="text-teal-400 text-2xl font-semibold mb-4">Our Mission</h2>
           <p className="text-gray-300 text-lg">
-            To deliver innovative solutions that empower our clients to achieve their goals.
+            At Jobtracker, our mission is to empower job seekers with an intuitive platform that simplifies resume optimization, job tracking, and application management. We provide essential tools like an ATS checker and a to-do list, helping individuals stay organized and confident throughout their job search.
           </p>
         </div>
         <div className="vision flex-1 bg-gray-800 p-6 rounded-xl shadow-lg">
           <h2 className="text-teal-400 text-2xl font-semibold mb-4">Our Vision</h2>
           <p className="text-gray-300 text-lg">
-            To provide open-source projects to our customers and maintain them for a long period of time.
+            Our vision is to be the leading platform for job seekers, providing the tools and resources needed to succeed in the job market. We aim to help individuals unlock their full potential and find meaningful employment opportunities with ease.
           </p>
         </div>
       </section>
@@ -67,15 +67,16 @@ const About = () => {
 
       <section className="education bg-gray-800 p-6 mt-12 rounded-xl shadow-lg mb-12">
         <h2 className="text-teal-400 text-2xl font-semibold mb-4">Our Educational Background</h2>
-        <p className="text-gray-300 text-lg mb-4">
-          Our team comprises graduates from prestigious institutions, bringing a wealth of knowledge and expertise to our company.
+        <p className="text-gray-300 text-lg mb-4">Our team consists of graduates from well-known institutions, bringing valuable knowledge and expertise to our company.
         </p>
 
         <ul className='text-neutral-300'>
-          <li>Harvard University</li>
-          <li>Massachusetts Institute of Technology (MIT)</li>
-          <li>Stanford University</li>
+          <li>Acropolis Institute of Technology and Research, Indore</li>
+          <li>B.Tech</li>
+          <li>Computer Science</li>
+          <li>2020 – 2024</li>
         </ul>
+
       </section>
     </div>
   );

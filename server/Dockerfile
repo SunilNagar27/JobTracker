@@ -4,15 +4,17 @@ FROM node:18
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package.json ./
-RUN npm install --force 
+# Copy package.json and package-lock.json if available, to leverage Docker caching
+COPY package*.json ./
 
-# Copy server files
+# Install dependencies
+RUN npm ci --force --production
+
+# Copy the rest of the application files
 COPY . .
 
-# Expose server port
+# Expose the server port
 EXPOSE 5000
 
 # Start the server
-CMD ["npm", "run","dev"]
+CMD ["npm", "start"]

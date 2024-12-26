@@ -1,32 +1,29 @@
 version: '3.8'
 
 services:
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    env_file:
-      - ./client/.env
-    networks:
-      - mern-network  
-
-  server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+  img:
+    image: devsunil27/jobtracker-backend
+    container_name: jobtracker-backend
     ports:
       - "5000:5000"
-    env_file:
-      - ./server/.env
-
+    volumes:
+      - backend_data:/app/data # Add volume for persistent backend data
     networks:
-      - mern-network  
+      - mern
+
+  imgg:
+    image: devsunil27/jobtracker-frontend
+    container_name: jobtracker-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - img # Ensure frontend starts after backend
+    networks:
+      - mern
 
 networks:
-  mern-network:
+  mern:
     driver: bridge
 
-
-      
+volumes:
+  backend_data: # Volume for backend

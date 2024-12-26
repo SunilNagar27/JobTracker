@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Features from "@/components/features";
 import HowItWorks from "@/components/howitworks";
-import Testimonial from "./testimonial";
+import Testimonial from "../components/testimonial";
 
 
 const Home = () => {

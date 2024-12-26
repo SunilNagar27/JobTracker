@@ -15,6 +15,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cra-template": "1.2.0",
+    "esbuild": "^0.24.2",
     "framer-motion": "^11.15.0",
     "lucide-react": "^0.468.0",
     "modal": "^1.2.0",
@@ -32,11 +33,10 @@
     "wouter": "^3.3.5"
   },
   "scripts": {
-    "dev":"vite --host 0.0.0.0",
+    "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "lint":"eslint . --ext js, jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext js, jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
-
   },
   "eslintConfig": {
     "extends": [
