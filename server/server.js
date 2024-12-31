@@ -18,6 +18,9 @@ app.use("/api", atsRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/jobs", jobRoutes);
 
+app.get("/", (req, res) => {
+  res.send("API working");
+});
 
 
 mongoose.connect(process.env.MONGO_URI)
