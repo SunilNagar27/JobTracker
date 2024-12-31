@@ -2,6 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+// const path = require("path");
+// const { fileURLToPath } = require("url");
+
+// import path from "path"
+// import { fileURLToPath } from "url";
+
 
 dotenv.config();
 const app = express();
@@ -13,10 +19,16 @@ const userRoutes = require("./routes/userRoutes");
 const jobRoutes = require("./routes/jobRoutes");
 const atsRoutes = require("./routes/atsRoutes");
 
-
 app.use("/api", atsRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/jobs", jobRoutes);
+
+// connecting frontend
+// app.use(express.static(path.join(__dirname,"/client/dist")))
+
+// app.get("*",(req,res) =>{
+//   res.sendFile(path.join(__dirname,"/client/dist/index.html"))
+// })
 
 
 
