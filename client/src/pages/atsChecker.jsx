@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../api";
 
 const ATSChecker = () => {
   const [resumeText, setResumeText] = useState("");
@@ -13,7 +14,7 @@ const ATSChecker = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/ats-score", {
+      const response = await axios.post(`${API_BASE_URL}/api/ats-score`, {
         resumeText,
         jobDescription,
       });

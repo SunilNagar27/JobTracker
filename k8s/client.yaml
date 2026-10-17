@@ -1,0 +1,65 @@
+# ${CLIENT_IMAGE} is filled in by the Jenkins pipeline (envsubst).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobtracker-client
+  namespace: jobtracker
+  labels:
+    app: jobtracker-client
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jobtracker-client
+  template:
+    metadata:
+      labels:
+        app: jobtracker-client
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101 # the "nginx" user in nginx-unprivileged
+      containers:
+        - name: client
+          image: ${CLIENT_IMAGE}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobtracker-client
+  namespace: jobtracker
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /
+spec:
+  type: ClusterIP
+  selector:
+    app: jobtracker-client
+  ports:
+    - port: 80
+      targetPort: 8080

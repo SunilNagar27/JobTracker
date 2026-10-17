@@ -22,12 +22,20 @@ app.get("/", (req, res) => {
   res.send("API working");
 });
 
+// Liveness/readiness endpoint for Docker, Kubernetes and the ALB
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    db: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+  });
+});
+
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log("Server running on port", PORT);

@@ -1,20 +1,25 @@
-# Base image for Node.js server
-FROM node:18
+# ---- Stage 1: install production dependencies only ----
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev && npm cache clean --force
 
-# Set working directory
+# ---- Stage 2: minimal runtime image ----
+FROM node:20-alpine
+ENV NODE_ENV=production
 WORKDIR /app
 
-# Copy package.json and package-lock.json if available, to leverage Docker caching
-COPY package*.json ./
+# Copy deps from stage 1, then app source (owned by the non-root "node" user)
+COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+COPY --chown=node:node . .
 
-# Install dependencies
-RUN npm ci --force --production
+# Never run as root inside the container
+USER node
 
-# Copy the rest of the application files
-COPY . .
-
-# Expose the server port
 EXPOSE 5000
 
-# Start the server
-CMD ["npm", "start"]
+# Used by Docker/Compose; Kubernetes uses its own probes against /health
+HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:${PORT:-5000}/health || exit 1
+
+CMD ["node", "server.js"]

@@ -1,0 +1,80 @@
+# ${SERVER_IMAGE} is filled in by the Jenkins pipeline (envsubst).
+# Secret "jobtracker-secrets" (MONGO_URI, JWT_SECRET) is created by the pipeline too.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobtracker-server
+  namespace: jobtracker
+  labels:
+    app: jobtracker-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jobtracker-server
+  template:
+    metadata:
+      labels:
+        app: jobtracker-server
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000 # the "node" user in the image
+      containers:
+        - name: server
+          image: ${SERVER_IMAGE}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PORT
+              value: "5000"
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: jobtracker-secrets
+                  key: MONGO_URI
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jobtracker-secrets
+                  key: JWT_SECRET
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobtracker-server
+  namespace: jobtracker
+  annotations:
+    # The ALB checks this path to decide whether a pod is healthy
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+spec:
+  type: ClusterIP
+  selector:
+    app: jobtracker-server
+  ports:
+    - port: 5000
+      targetPort: 5000

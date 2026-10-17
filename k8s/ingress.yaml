@@ -1,0 +1,31 @@
+# One ALB, one URL. /api goes to the backend, everything else to the React app.
+# Because both live behind the same address, the frontend is built with an empty
+# API URL and simply calls /api/... on whatever host served the page.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jobtracker
+  namespace: jobtracker
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: jobtracker-server
+                port:
+                  number: 5000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jobtracker-client
+                port:
+                  number: 80
