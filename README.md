@@ -1,169 +1,182 @@
-# JobTracker: end-to-end DevOps project
+# JobTracker: DevOps Project
 
-A MERN app (React + Express + MongoDB) taken from `git push` all the way to a running
-site on AWS EKS, with security scanning on every build and a one-command teardown so the
-AWS bill stays near zero.
+JobTracker is a MERN app I built to track job applications. You can search for jobs, keep track of the ones you applied to, and check how well a resume matches a job with the ATS checker. In this project I took it from plain source code to a full DevOps setup: Docker images, a Jenkins pipeline with SonarQube and Trivy scans, images stored in ECR, and a Kubernetes (EKS) deployment on AWS created with Terraform.
+
+I did this on an AWS free account, so I also designed it to cost as little as possible. The EKS cluster only exists while I am testing, and one command destroys it.
+
+![Running app](docs/screenshots/01-app-running.png)
+
+## How it works
 
 ```
- git push ─► Jenkins ─►  SonarQube ─► Trivy (files)
-                │
-                ├─► docker build ─► Trivy (images) ─► Amazon ECR
-                │
-                └─► kubectl apply ─► EKS (2 Spot nodes) ─► ALB ─┬─ /api ─► Express
-                                                                 └─ /    ─► React (nginx)
-                                        MongoDB Atlas (free M0) ◄──────── Express
-        Everything on AWS is created and destroyed with Terraform
+GitHub ──► Jenkins (runs locally in Docker)
+             │
+             ├─ SonarQube      code quality and quality gate
+             ├─ Trivy          vulnerability scan
+             ├─ Docker build   frontend (nginx) and backend (Node)
+             └─ Push ───────► Amazon ECR
+                                  │
+                                  ▼
+                 Amazon EKS (created with Terraform)
+                                  │
+        Internet ─► ALB ─┬─ /api ─► backend ─► MongoDB Atlas
+                         └─ /    ─► frontend
 ```
 
-| Part           | Tool                         | Where it runs        | Cost                      |
-| -------------- | ---------------------------- | -------------------- | ------------------------- |
-| Code           | GitHub                       | cloud                | free                      |
-| CI/CD          | Jenkins                      | your laptop (Docker) | free                      |
-| Code quality   | SonarQube Community          | your laptop (Docker) | free                      |
-| Security scans |  Trivy, ECR scan-on-push    | Jenkins / ECR        | free                      |
-| Images         | Amazon ECR                   | AWS                  | pennies                   |
-| Cluster        | EKS + 2 Spot t3.medium + ALB | AWS                  | about $0.25/hour while up |
-| Database       | MongoDB Atlas M0             | cloud                | free                      |
-| Infra as code  | Terraform                    | your laptop          | free                      |
+## Tools I used
 
-## Repo map
+| What | Tool |
+|---|---|
+| App | React (Vite), Node.js, Express, MongoDB Atlas |
+| Containers | Docker, Docker Compose, nginx |
+| CI/CD | Jenkins |
+| Code quality | SonarQube |
+| Security scan | Trivy, plus ECR scan on push |
+| Registry | Amazon ECR |
+| Orchestration | Kubernetes on Amazon EKS |
+| Ingress | AWS Load Balancer Controller (ALB) |
+| Infrastructure as code | Terraform |
 
-| Path                                           | What it is                                                             |
-| ---------------------------------------------- | ---------------------------------------------------------------------- |
-| `server/`, `client/`                       | the app, each with its own Dockerfile                                  |
-| `docker-compose.yml`                         | run the whole app locally (with MongoDB)                               |
-| `Jenkinsfile`                                | the pipeline                                                           |
-| `jenkins/`                                   | Jenkins + SonarQube for your laptop, and the IAM policy for Jenkins    |
-| `k8s/`                                       | Kubernetes manifests (deployments, services, ALB ingress)              |
-| `terraform/base/`                            | ECR repos + budget alert. Cheap, leave it running.                     |
-| `terraform/eks/`                             | VPC + EKS + ALB controller. Expensive, create and destroy per session. |
-| `scripts/eks-up.sh`, `scripts/eks-down.sh` | create / safely destroy the cluster                                    |
+## The pipeline
 
-## Cost rules (read once)
+The Jenkinsfile has these stages:
 
-- The EKS control plane costs about $0.10/hour **whenever it exists**, even if idle. Destroy it when you stop.
-- There is **no NAT gateway** (saves about $32/month). Nodes sit in public subnets.
-- `scripts/eks-down.sh` deletes the load balancer *before* the VPC. Plain `terraform destroy` can leave an ALB behind.
-- Keep `kubernetes_version` inside EKS standard support. Older versions are billed extra. Check [https://endoflife.date/amazon-eks](https://endoflife.date/amazon-eks).
-- A typical 4-hour session costs about $1. Ten sessions is roughly $10 to $15 of your $100 credit.
+1. **Checkout**: gets the code and makes an image tag from the build number and commit hash.
+2. **SonarQube analysis**: scans the code and waits for the quality gate.
+3. **Trivy file scan**: checks the repo for known vulnerabilities.
+4. **Build images**: builds the frontend and backend Docker images.
+5. **Trivy image scan**: scans the built images for HIGH and CRITICAL issues.
+6. **Push to ECR**: pushes both images with the build tag and `latest`.
+7. **Deploy to EKS**: optional, I turn it on with a build parameter. It creates the Kubernetes secret, applies the manifests and waits for the rollout.
 
----
+![Jenkins pipeline](docs/screenshots/02-jenkins-pipeline.png)
 
-## One-time setup
+![SonarQube result](docs/screenshots/03-sonarqube.png)
 
-### 0. Install on your laptop
+## Project structure
 
-Docker Desktop, Git, AWS CLI v2, Terraform (1.6+), kubectl.
+```
+.
+├── client/                 React frontend, Dockerfile, nginx.conf
+├── server/                 Express backend, Dockerfile
+├── docker-compose.yml      runs the whole app locally
+├── Jenkinsfile             the pipeline
+├── sonar-project.properties
+├── jenkins/                Jenkins and SonarQube setup (Docker Compose)
+├── k8s/                    Kubernetes manifests
+├── terraform/
+│   ├── base/               ECR repos and budget alert (always up)
+│   └── eks/                VPC, EKS cluster, nodes, ALB controller (create and destroy)
+└── scripts/
+    ├── eks-up.sh           creates the cluster
+    └── eks-down.sh         destroys the cluster
+```
 
-### 1. Rotate the leaked key
+I kept Terraform in two stacks on purpose. ECR and the budget alert cost almost nothing, so they stay. The EKS stack is the expensive part, so I can destroy it without losing my images.
 
-An OpenAI key was committed in `client/.env` earlier. **Revoke it** at platform.openai.com → API keys. Removing the file from git does not remove it from history.
+## Run it locally
 
-### 2. Run the app locally
+You need Docker with Compose.
 
 ```bash
-cp .env.example .env            # set JWT_SECRET  (openssl rand -hex 32)
+git clone https://github.com/SunilNagar27/JobTracker.git
+cd JobTracker
+cp .env.example .env
+# put a random value in JWT_SECRET, for example: openssl rand -hex 32
 docker compose up --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000). API health: [http://localhost:5000/health](http://localhost:5000/health).
+The app opens at http://localhost:3000 and the backend health check is at http://localhost:5000/health.
 
-### 3. AWS account safety
+## Deploy to AWS
 
-1. Billing → turn on "Receive Billing Alerts" and look at Free Tier usage.
-2. IAM → create user **`devops-admin`** with `AdministratorAccess` and an access key. This is for Terraform on your laptop. Never use the root account for daily work.
-3. `aws configure` with that key (region `ap-south-1`).
-4. IAM → create a second user **`jenkins-deployer`** with the policy in `jenkins/iam-policy.json` and an access key. Jenkins uses this one.
+**1. Before starting**
 
-### 4. Create ECR repos and the budget alert
+I used an IAM user (not root) with `aws configure`, and installed Terraform, kubectl and the AWS CLI. I also created a free MongoDB Atlas M0 cluster for the database.
+
+**2. ECR repos and budget alert**
 
 ```bash
 cd terraform/base
-cp terraform.tfvars.example terraform.tfvars    # put your email in it
-terraform init && terraform apply
+echo 'alert_email = "you@example.com"' > terraform.tfvars
+terraform init
+terraform apply
 ```
 
-Confirm the budget email AWS sends you.
-
-### 5. MongoDB Atlas (free)
-
-Create an M0 cluster, a database user, and under Network Access allow `0.0.0.0/0` (fine for learning; nodes have changing IPs). Copy the connection string and add a database name, for example `...mongodb.net/jobtracker?retryWrites=true&w=majority`.
-
-### 6. Start Jenkins and SonarQube
+**3. Jenkins and SonarQube**
 
 ```bash
-# Linux only, once per boot (SonarQube needs it)
+# Linux only, SonarQube needs this once after every boot
 sudo sysctl -w vm.max_map_count=262144
 
 cd jenkins
-docker compose up -d --build        # first build takes several minutes
+docker compose up -d --build
 ```
 
-- SonarQube: [http://localhost:9000](http://localhost:9000), login `admin` / `admin`, set a new password.
-  Then My Account → Security → generate a token (type: User token). Copy it.
-- Jenkins: [http://localhost:8080](http://localhost:8080). Get the first password with
-  `docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`, then "Install suggested plugins".
+Jenkins runs on http://localhost:8080 and SonarQube on http://localhost:9000. In Jenkins I added these credentials:
 
-### 7. Add Jenkins credentials
+| ID | Type | What it holds |
+|---|---|---|
+| `aws-credentials` | Username with password | AWS access key ID and secret |
+| `sonar-token` | Secret text | SonarQube token |
+| `mongo-uri` | Secret text | Atlas connection string |
+| `jwt-secret` | Secret text | random string for JWT |
 
-Manage Jenkins → Credentials → System → Global → Add:
+Then I created a Pipeline job that reads the Jenkinsfile from this repo.
 
-| ID                  | Kind                   | Value                                           |
-| ------------------- | ---------------------- | ----------------------------------------------- |
-| `aws-credentials` | Username with password | `jenkins-deployer` access key id / secret key |
-| `sonar-token`     | Secret text            | the SonarQube token                             |
-| `mongo-uri`       | Secret text            | Atlas connection string                         |
-| `jwt-secret`      | Secret text            | `openssl rand -hex 32`                        |
+**4. Build and push images**
 
-### 8. Create the pipeline job
+I run the job with `DEPLOY_TO_EKS` unticked. The images go to ECR.
 
-New Item → **Pipeline** → name `jobtracker` → Pipeline definition: *Pipeline script from SCM* → Git →
-repo URL `https://github.com/SunilNagar27/JobTracker.git`, branch to build = the branch holding the `Jenkinsfile`, script path `Jenkinsfile`.
-Save, then click **Build Now** once. The first run only registers the build parameters and may fail. That is normal. After that, use **Build with Parameters**.
-
-### 9. First pipeline run (no cluster, costs nothing)
-
-Build with Parameters, leave `DEPLOY_TO_EKS` unticked. Expect: scans pass, images land in ECR.
-Check SonarQube ([http://localhost:9000](http://localhost:9000)) for the report.
-
----
-
-## Every session: deploy, demo, destroy
+**5. Create the cluster and deploy**
 
 ```bash
-# 1. Create the cluster (about 15 minutes, billing starts)
-./scripts/eks-up.sh
+./scripts/eks-up.sh        # takes about 15 to 20 minutes
+```
 
-# 2. Let Jenkins deploy. Build with Parameters, tick DEPLOY_TO_EKS.
-#    (If Jenkins uses a different IAM user than your laptop, put its ARN in
-#     terraform/eks/terraform.tfvars as admin_principal_arns and re-run eks-up.sh.)
+Then I run the Jenkins job again with `DEPLOY_TO_EKS` ticked and get the app URL:
 
-# 3. Get the URL (ALB takes 2 to 3 minutes)
-kubectl -n jobtracker get ingress jobtracker      # copy the ADDRESS, open it in a browser
+```bash
+kubectl -n jobtracker get ingress jobtracker
+```
 
-# 4. Demo, screenshots, Grafana, whatever you need.
+The ALB takes 2 to 3 minutes before it starts answering.
 
-# 5. ALWAYS finish with:
+![EKS cluster, all workloads running](docs/screenshots/05-eks-cluster.png)
+
+![Application Load Balancer created by the Ingress](docs/screenshots/04-alb-loadbalancer.png)
+
+**6. Destroy it**
+
+```bash
 ./scripts/eks-down.sh
 ```
 
-Afterwards, confirm nothing is left billing. The script prints these commands:
-EKS clusters, load balancers, EBS volumes.
+After that I check the AWS console for leftover clusters, instances, load balancers and volumes.
 
-## Troubleshooting
+## How I kept the cost down
 
-| Symptom                         | Likely cause / fix                                                                   |
-| ------------------------------- | ------------------------------------------------------------------------------------ |
-| Build parameters missing        | Run one build first so Jenkins reads the `Jenkinsfile`.                            |
-| Gitleaks fails                  | It found a secret in the files. Remove it and rotate it. Never allowlist a real key. |
-| SonarQube stage can't connect   | `docker compose ps` in `jenkins/`; on Linux set `vm.max_map_count`.            |
-| Quality Gate fails              | Open the project in SonarQube and fix or review the issues, or adjust the gate.      |
-| `ImagePullBackOff`            | Images not in ECR (run a build first), or the cluster is in a different region.      |
-| Pods `Pending`                | Not enough node capacity. Raise `node_desired_size` or use a bigger instance type. |
-| ALB never appears               | `kubectl -n kube-system logs deploy/aws-load-balancer-controller`                  |
-| Spot node disappeared           | Normal for Spot. Set `capacity_type = "ON_DEMAND"` for a steadier demo.            |
-| Login or API errors on the site | Check the `jobtracker-secrets` secret and that Atlas allows the node IPs.          |
+- The cluster is created only when I need it and destroyed after. A few hours of testing costs about a dollar.
+- No NAT gateway. The worker nodes are in public subnets with locked-down security groups, which saves around $32 a month.
+- Two small Spot nodes instead of on-demand.
+- MongoDB Atlas free tier, and Jenkins and SonarQube run on my laptop.
+- ECR keeps only the last 10 images per repo.
+- An AWS budget sends me email alerts at 20%, 60% and 100%. It ignores credits, so the alerts still come even while the credits cover the bill.
 
-## Next phases
+## Problems I hit and how I fixed them
 
-Prometheus and Grafana on the cluster (Helm), a remote Terraform state in S3, and Argo CD for GitOps.
+- **`.dockerIgnore` was not working.** Docker on Linux only reads `.dockerignore` in lowercase, so the file was skipped and `.env` and `node_modules` could have ended up in the images. I renamed it.
+- **ALB left behind after `terraform destroy`.** The Kubernetes controller creates the ALB, not Terraform, so Terraform does not know about it and the VPC delete gets stuck. In `eks-down.sh` I delete the Ingress first and then run `terraform destroy`.
+- **Scripts failed on Linux with `bash\r: No such file or directory`.** They had Windows line endings. I converted them and added a `.gitattributes` rule for `*.sh`.
+- **SonarQube scan timing out.** My laptop was low on memory with Jenkins, SonarQube and the browser all running. I freed memory and limited the scanner's Node memory.
+
+## What I want to add next
+
+- Prometheus and Grafana for monitoring
+- Terraform remote state in S3
+- Argo CD for GitOps deployments
+- The same pipeline for my second project, ImageGini
+
+## About me
+
+Sunil Nagar, DevOps engineer. [GitHub](https://github.com/SunilNagar27)
