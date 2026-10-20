@@ -1,0 +1,17 @@
+node_modules
+dist
+build
+.git
+.gitignore
+
+# Secrets and local config must never enter an image
+.env
+.env.*
+!.env.example
+
+Dockerfile
+.dockerignore
+*.log
+.vscode
+.idea
+.DS_Store

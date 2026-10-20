@@ -1,23 +1,51 @@
-version: '3.8'
-
 services:
-  img:
-    image: devsunil27/jobtracker-backend
-    container_name: jobtracker-backend
+  mongo:
+    image: mongo:7
+    container_name: jobtracker-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - mern
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build: ./server
+    image: jobtracker-server:local
+    container_name: jobtracker-server
+    restart: unless-stopped
+    environment:
+      PORT: 5000
+      MONGO_URI: mongodb://mongo:27017/jobtracker
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
     ports:
       - "5000:5000"
-    volumes:
-      - backend_data:/app/data # Add volume for persistent backend data
+    depends_on:
+      mongo:
+        condition: service_healthy
     networks:
       - mern
 
-  imgg:
-    image: devsunil27/jobtracker-frontend
-    container_name: jobtracker-frontend
+  client:
+    build:
+      context: ./client
+      args:
+        # The browser calls the API, so this must be a URL reachable from your machine
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:5000}
+        VITE_APP_EMAILJS_SERVICE_ID: ${VITE_APP_EMAILJS_SERVICE_ID:-}
+        VITE_APP_EMAILJS_TEMPLATE_ID: ${VITE_APP_EMAILJS_TEMPLATE_ID:-}
+        VITE_APP_EMAILJS_PUBLIC_KEY: ${VITE_APP_EMAILJS_PUBLIC_KEY:-}
+    image: jobtracker-client:local
+    container_name: jobtracker-client
+    restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3000:8080"
     depends_on:
-      - img # Ensure frontend starts after backend
+      - server
     networks:
       - mern
 
@@ -26,4 +54,4 @@ networks:
     driver: bridge
 
 volumes:
-  backend_data: # Volume for backend
+  mongo_data:

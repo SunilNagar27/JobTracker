@@ -1,0 +1,9 @@
+# Local Terraform working files and state (state can contain secrets)
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+terraform.tfvars
+*.auto.tfvars
+tfplan
+# Keep .terraform.lock.hcl committed so provider versions are reproducible
